@@ -1,0 +1,11 @@
+venv/
+.info_db/
+.databases/
+.databases/tweets_DunyaJasim.xlsx
+.databases/tweets_EdwardQian.csv
+.databases/tweets_FErno2.csv
+.databases/tweets_MYasserH.csv
+.databases/tweets_SheikMohamedImran.csv
+.databases/tweets_TirendazAi.csv
+.training.1600000.processed.noemoticon.csv.icloud
+*~
