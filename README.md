@@ -8,5 +8,3 @@ The database used for training the algorithm is a dump from the social medium Tw
 This readme-file will be updated with each progress made in the project. So make sure you come back once in a week for new updates.
 
 # twitter_sentiment
-# twitter_sentiment
-# final_project_in_twitter_sentiment
