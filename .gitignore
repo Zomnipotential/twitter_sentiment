@@ -1,5 +1,3 @@
-corpus.txt
-token_frequencies.csv
 .venv/
 .info_db/
 .databases/
