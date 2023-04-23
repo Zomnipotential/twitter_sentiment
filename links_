@@ -1,2 +1,139 @@
 <h2>Investigating the Sentiments</h2>
 <h3>Step 1: Find Duplicates</h3>
+
+
+
+
+
+
+
+<a id='Introduction'><h1>Introduction</h1></a>
+
+
+
+<a id='columnnames'><h4>Column Names</h4></a>
+
+
+
+
+
+<h4>Import</h4></a>
+
+<a id='import'><h4>Read the File</h4></a>
+
+
+<a id='action'><h1>Action</h1></a>
+
+
+
+
+<a id='investigatingthedataframe'><h3>Investigating the Dataframe</h3></a>
+
+
+
+
+
+
+<a id='investigatingthesentiments'><h2>Investigating the Sentiments</h2></a>
+
+
+<a id='step1'><h3>Step 1:</a> Finding Duplicates</h3>
+
+
+
+<a id='step2'><h3>Step 2:</a> Remove Duplicates</h3>
+
+
+<a id='step1'><h3>Step 1:</a> Find Duplicates</h3>
+
+
+
+<a id='step3'><h3>Step 3:</a> Neutralize the Sentiments</h3>
+
+
+<a id='cleanout'><h2>Clean Out</h2></a>
+
+
+<h4><a id='testzone'>Step 2.1:</a> Generate Corpus</h4>
+
+
+
+<a id='thevocabulary'><h2>The Vocabulary</h2></a>
+
+
+
+<a id='step1'><h3>Step 1:</a> Remove Unnecessary Tokens</h3>
+
+<ol>
+  <li>Remore all @tags and #tags</li>
+  <li>Remove all punctuation</li>
+  <li>Remove all common words</li>
+    <ul>
+      <li>Articles: "a", "an", "the"</li>
+      <li>Conjunctions: "and", "or", "but"</li>
+      <li>Prepositions: "at", "on", "in", "of", "to", "with", "by"</li>
+      <li>Pronouns: "he", "she", "it", "they", "we", "you"</li>
+      <li>Auxiliary verbs: "am", "is", "are", "was", "were", "be", "been", "have", "has", "had", "do", "does", "did"</li>
+      <li>Adverbs of frequency: "always", "usually", "often", "sometimes", "rarely", "never"</li>
+      <li>Interjections: "oh", "ah", "wow", "hmm"</li>
+    </ul>
+  <li>Remove all words that are not in the vocabulary?????</li>
+</ol>
+
+
+
+
+
+
+<h3>Step 2: Gather Unique Tokens</h3>
+
+<ol>
+  <li>Make one big text out of all tokens used in the 'text' column; call it 'corpus'</li>
+  <li>Save a list of all the unique tokens from the 'corpus' in a csv-file for ease of use; this one we'll call 'token_list'</li>
+  <li>Find and add the frequency of each token in the 'corpus' to the 'token_list'</li>
+</ol>
+
+
+
+
+
+
+<a id='sidetrackmemoryusage'><h4>Side Track</a> - Memory Usage</h4> * * * * * * * * *
+
+
+
+<a id='testzone'><h4>Step 2.2:</a> Split & Count</h4>
+
+
+<h3><a id='Step 3'>Step 3:</a> Cleaning with Regard to Sentiments</h3>
+
+<ol>
+  <li>Look at the three categories of sentiments and try to find what differentiates a positive sentiment from a negative or a neutral one, with regard to the words used in their related texts</li>
+  <li>At last, we'll prune the 'text' column to leave only the words that are necessary to keep in each tweet. This is what constitutes the input to our ML system. And we'll save this as another csv-file, together with the corresponding sentiments - the outputs - which we will call the 'column'
+</ol>
+
+
+
+
+<h3><a id='step4'>Step 4:</a> Learn from Google's Search Engine</h3>
+
+<ul>
+    <li>Word frequency analysis: This algorithm counts the frequency of each word in a text and identifies the most common words.</li>
+    <li>TF-IDF: This algorithm identifies the most important words in a text by comparing their frequency in the text to their frequency in a larger corpus of texts.</li>
+    <li>Latent Dirichlet Allocation (LDA): This algorithm is used for topic modeling, which involves identifying the topics present in a text or set of texts.</li>
+    <li>Word2Vec: This algorithm creates a vector representation for each word in a text, which can be used for various NLP tasks like semantic similarity and word analogy.</li>
+    </li>Deep Learning Models: Google also uses deep learning models such as neural networks for various NLP tasks, including language translation, sentiment analysis, and question answering.</li>
+</ul>
+
+
+
+<a id='sidetracksplitthedate'><h1>Side Track - Split the Date</h1></a>
+
+
+
+<a id='sidetrackfollowup'><h1>Side Track Follow-Up:</h1></a>
+
+
+
+
+<a id='testzone'><h1>TEST ZONE</H1></a>
