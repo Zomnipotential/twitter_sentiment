@@ -1,3 +1,4 @@
+nl='\n'
 # column name for the sentiment labels
 columns = ['sentiment', 'id', 'date', 'flag', 'user', 'text']
 # path to the repository, where all generated files are stored
