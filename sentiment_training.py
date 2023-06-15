@@ -71,3 +71,8 @@ vocabulary = list(model.wv.key_to_index.keys())
 # Print the words in the vocabulary
 for word in vocabulary:
     print(word)
+
+#################
+# right now, we are trying to define a function where the constant 
+# EMBEDDING_SIZE from inside sentiment_cleaning.py can be saved in
+# and later used in sentiment_training.py
