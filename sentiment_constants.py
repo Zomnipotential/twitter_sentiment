@@ -1,3 +1,10 @@
+# maximum number of tokens in all the df rows to decide the embedding size
+def modify_constant(new_value):
+    global EMBEDDING_SIZE
+    EMBEDDING_SIZE = new_value
+def get_constant():
+	return EMGEDDING_SIZE
+# just saving some code space and avoid repetition
 nl='\n'
 # column name for the sentiment labels
 columns = ['sentiment', 'id', 'date', 'flag', 'user', 'text']

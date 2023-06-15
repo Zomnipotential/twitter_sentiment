@@ -1,3 +1,6 @@
+import sys
+print('cleaning ->', sys.executable)
+
 # PREAMBLE: CONTROL & INDICATOR SECTION
 import time
 absolute_start_time = time.time()
@@ -9,39 +12,19 @@ start_time = time.time()
 # 	print(f"{5*nl}{(4+length)*'*'}{nl}* {content} *{nl}* {(length)*' '} *{nl}{(4+length)*'*'}{nl}")
 
 # ACTUAL CODE STARTS HERE
-
-# PACKAGES
-import gc
-import os
-import re
-import csv
-import sys
-import nltk
-import string
-import shutil
-import datetime
-#import objgraph
-#import threading
-import functools
-import contractions
-import pandas as pd
-import matplotlib.pyplot as plt
-import progress_indicator as pi
+import sentiment_functions as func
+import sentiment_constants as const
 from IPython.display import display
-from memory_profiler import profile
-from IPython.core.display import Image
-from collections import Counter
-from pytagcloud import create_tag_image, make_tags
-from pytagcloud.lang.counter import get_tag_counts
-from typing import Union, List, Dict, Tuple, Any, Optional, Callable
-from varname import varname, nameof
-from varname.helpers import Wrapper
+import pandas as pd
+import nltk
 from nltk.corpus import stopwords
+import progress_indicator as pi
+import threading
+import time
+import re
+import contractions
 from nltk.tokenize import TweetTokenizer
-
-#import packages as pkg
-import constants as const
-import functions as func
+import csv
 
 number_of_rows = int(sys.argv[1])
 
@@ -93,7 +76,8 @@ func.title('number of items')
 for _ in dframe.columns:
     display(_)
     display(dframe[_].value_counts())
-    
+
+# show the whole table without any truncations
 pd.set_option('display.max_colwidth', None)
 
 print(dframe[dframe['user'].astype('string') == 'lost_dog']['text'])
@@ -135,7 +119,7 @@ func.title('clean out - remove flag')
 flagless_dframe = neutralized_dframe.drop(columns=['flag'])
 flagless_dframe.head(50)
 
-func.title('drop other unecessary columns')
+func.title('drop other unnecessary columns')
 df = flagless_dframe.drop(columns=['id', 'date', 'user'])
 display(df)
 
@@ -164,7 +148,6 @@ stop_words = set(stopwords.words('english'))
 
 func.title('NLTK English stopwords are')
 display(stop_words)
-
 
 ### These could be done separately
 # func.title('wordnet lemmatizer')
@@ -313,6 +296,7 @@ def lowercase_alpha(list_token):
 	return [token.lower() if (token.isalpha() or token[0]=='#') else token for token in list_token]
 
 def posttokenization_cleaning(unkn_input):
+	embedding_size = 0
 	list_output=[]
 	if (isinstance(unkn_input,list)):
 		list_output=unkn_input
@@ -321,6 +305,9 @@ def posttokenization_cleaning(unkn_input):
 	list_output=remove_punc(list_output)
 	list_output=remove_empty_item(list_output)
 	#list_output=lowercase_alpha(list_output)
+	number_tokens = len(list_output)
+	if embedding_size < number_tokens:
+		const.modify_constant(number_tokens)
 	return (list_output)
 
 print_exec_time(start_time)
@@ -417,18 +404,36 @@ print_exec_time(start_time)
 print(df.head(10))
 
 
+# POST-TOKENIZATION
+
+start_time = time.time()
+func.title('String-Cleaning')
+# start new thread
+pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
+pi.start_thread()
+
+# (4.5) Post-Tokenization Cleaning
+# calling string_cleaning (list comprehension style)
+df['nonletterclean']=[re.sub("[^a-zA-Z ]", "", str(list_sentence)) for list_sentence in df['posttoken']]
+# stop the dotter
+pi.stop_thread()
+# calculate and print execution time
+print_exec_time(start_time)
+print(df.head(10))
+
 # DATA EXPORT
 
 start_time = time.time()
 
 final_csv='./final_csv.csv'
-posttoken_csv = './posttoken_df.csv'
+nonletterclean_csv = './nonletterclean_df.csv'
 sentiment_csv = './sentiment_df.csv'
 
  
 def export_csv(data_frame, csv_name):
 	# get list of columns from df
 	listHeader=list(data_frame.columns.values)
+	print(listHeader)
 	# insert index column header to the first pos in list
 	listHeader.insert(0,'index')
 	# export df to csv
@@ -450,11 +455,11 @@ def export_csv(data_frame, csv_name):
 export_csv(df, final_csv)
 display(df.columns)
 display(df)
-posttoken_df = df.drop(['sentiment','text','pretoken','token','stemmed','lemmatized'], axis=1)
-sentiment_df = df.drop(['text','pretoken','token','stemmed','lemmatized','posttoken'], axis=1)
+nonletterclean_df = df.drop(['sentiment','text','pretoken','token','stemmed','lemmatized','posttoken'], axis=1)
+sentiment_df = df.drop(['text','pretoken','token','stemmed','lemmatized','posttoken','nonletterclean'], axis=1)
 # export the final dataset as 'input_csv'; the 
 # one that is meant to be fed into the ML engine
-export_csv(posttoken_df, posttoken_csv)
+export_csv(nonletterclean_df, nonletterclean_csv)
 export_csv(sentiment_df, sentiment_csv)
 
 # # (2) import for testing
