@@ -27,7 +27,7 @@ func.title('embedding size')
 print(f'embedding size is {func.Emsize().getES()}')
 		
 # model = Word2Vec([str(sentence).lower().replace("'", "").replace(",", "").replace("[", "").split() for sentence in x_train.values])
-model = Word2Vec([re.sub("[^a-zA-Z ]", "", str(sentence)).split() for sentence in x_train.values])
+model = Word2Vec([re.sub("[^a-zA-Z ]", "", str(sentence)).split() for sentence in x_train.values], vector_size=int(func.Emsize().getES()), min_count=1)
 # model = Word2Vec([print(sentence) for sentence in x_train.values])
 
 # Load the Word2Vec model
