@@ -1,4 +1,6 @@
-token_frequencies.csv
+*.csv
+*.txt
+*.png
 word_cloud
 .venv/
 .info_db/
