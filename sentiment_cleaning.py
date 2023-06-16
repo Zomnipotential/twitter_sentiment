@@ -296,7 +296,6 @@ def lowercase_alpha(list_token):
 	return [token.lower() if (token.isalpha() or token[0]=='#') else token for token in list_token]
 
 def posttokenization_cleaning(unkn_input):
-	embedding_size = 0
 	list_output=[]
 	if (isinstance(unkn_input,list)):
 		list_output=unkn_input
@@ -304,10 +303,7 @@ def posttokenization_cleaning(unkn_input):
 		list_output=strg_list_to_list(unkn_input)
 	list_output=remove_punc(list_output)
 	list_output=remove_empty_item(list_output)
-	#list_output=lowercase_alpha(list_output)
-	number_tokens = len(list_output)
-	if embedding_size < number_tokens:
-		const.modify_constant(number_tokens)
+	const.EMBEDDING_SIZE = max(const.EMBEDDING_SIZE, len(list_output))
 	return (list_output)
 
 print_exec_time(start_time)
@@ -397,6 +393,7 @@ pi.start_thread()
 # (4.5) Post-Tokenization Cleaning
 # calling post-tokenization_cleaning (list comprehension style)
 df['posttoken']=[posttokenization_cleaning(list_sentence) for list_sentence in df['lemmatized']]
+func.Emsize.setES(const.EMBEDDING_SIZE)
 # stop the dotter
 pi.stop_thread()
 # calculate and print execution time
@@ -435,7 +432,7 @@ def export_csv(data_frame, csv_name):
 	listHeader=list(data_frame.columns.values)
 	print(listHeader)
 	# insert index column header to the first pos in list
-	listHeader.insert(0,'index')
+###	listHeader.insert(0,'index') ### I removed this extra column to skip it in the final files
 	# export df to csv
 	# set the quoting to be QUOTE_ALL
 	data_frame.to_csv(csv_name,columns=data_frame.columns.values,quoting=csv.QUOTE_ALL)
@@ -478,3 +475,5 @@ export_csv(sentiment_df, sentiment_csv)
 
 print_exec_time(start_time)
 print_exec_time(absolute_start_time)
+
+print(f'embedding size is {func.Emsize().getES()}')
