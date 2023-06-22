@@ -8,6 +8,11 @@ columns = ['sentiment', 'id', 'date', 'flag', 'user', 'text']
 repo_path = './.repository/'
 # Size of the original corpus
 CORPUS_MENSURA = 'corpus_mensura.txt'
+# Minimum criteria for frequency of the words in the library for not being left out
+# from the vocabulary
+MIN_FREQ = 6
+MAX_LENGTH = None
+VOCAB_SIZE = None
 #common_special_chars = "([!#$%&'()*+,-\/:;.<>?@\[\\\]^_`{|}~–]+)(.*)"
 #make a dictionary of emoticons using the following lines, the key is the emoticon and the value is the meaning
 emoticons = {'<3': 'heart', "&lt;3": 'heart', '</3': 'broken heart', \
@@ -26,6 +31,7 @@ emoticons = {'<3': 'heart', "&lt;3": 'heart', '</3': 'broken heart', \
             ':|': 'neutral', ':-|': 'neutral', \
             ':*': 'kiss', ':-*': 'kiss', \
             ':/': 'skeptical', ':-/': 'skeptical', \
+            '*sigh*': 'aah', \
             }
 
 #emoticons = {}':-)', ':)', ':-]', ':]', ':-3', ':3', ':->', ':>', '8-)', '8)', ':-}', ':}', ':o)', ':c)', ':^)', '=]',]

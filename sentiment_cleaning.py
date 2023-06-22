@@ -6,13 +6,13 @@ import time
 absolute_start_time = time.time()
 start_time = time.time()
 
-# def func.title(content):
+# def fun.title(content):
 # 	nl = '\n'
 # 	length = len(content)
 # 	print(f"{5*nl}{(4+length)*'*'}{nl}* {content} *{nl}* {(length)*' '} *{nl}{(4+length)*'*'}{nl}")
 
 # ACTUAL CODE STARTS HERE
-import sentiment_functions as func
+import sentiment_functions as fun
 import sentiment_constants as const
 from IPython.display import display
 import pandas as pd
@@ -28,25 +28,25 @@ import csv
 
 number_of_rows = int(sys.argv[1])
 
-func.title('It all starts here')
+fun.title('It all starts here')
 
 def print_exec_time(start_time):
-	elapsed_time = time.time() - start_time 
-	# Convert the elapsed time to a human-readable format
-	hours = int(elapsed_time // 3600)
-	minutes = int((elapsed_time % 3600) // 60)
-	seconds = int(elapsed_time % 60)
-	milliseconds = int((elapsed_time % 1) * 1000)
-
-	# Print the elapsed time
-	nl = const.nl
-	print(f"{5*nl}====== Elapsed time: {hours}h {minutes}m {seconds}s {milliseconds}ms ======{2*nl}")
-
+    elapsed_time = time.time() - start_time 
+    # Convert the elapsed time to a human-readable format
+    hours = int(elapsed_time // 3600)
+    minutes = int((elapsed_time % 3600) // 60)
+    seconds = int(elapsed_time % 60)
+    milliseconds = int((elapsed_time % 1) * 1000)
+    
+    # Print the elapsed time
+    nl = const.nl
+    print(f"{5*nl}====== Elapsed time: {hours}h {minutes}m {seconds}s {milliseconds}ms ======{2*nl}")
+    
 # read the file
-
+    
 if __name__ == '__name__':
-	print('Starting Spark Session. All data is loaded into memory')
-
+    print('Starting Spark Session. All data is loaded into memory')
+            
 # choose a small part of the DB to run the functions faster
 # 2B REMOVED
 dframe = pd.read_csv('.databases/tweets.csv', encoding='ISO-8859-1')
@@ -56,23 +56,23 @@ dframe.columns = const.columns
 
 # learn to know the database
 
-func.title('the first five rows of the database')
+fun.title('the first five rows of the database')
 display(dframe.head())
 display(dframe)
-func.title('shape of the database')
+fun.title('shape of the database')
 display(dframe.shape)
 dframe.columns = const.columns
-func.title('information')
+fun.title('information')
 display(dframe.info())
-func.title('description')
+fun.title('description')
 display(dframe.describe())
 
 # investigate the dataframe
 
-func.title('number of unique items in each column')
+fun.title('number of unique items in each column')
 display(dframe.apply(pd.Series.nunique))
 
-func.title('number of items')
+fun.title('number of items')
 for _ in dframe.columns:
     display(_)
     display(dframe[_].value_counts())
@@ -82,56 +82,56 @@ pd.set_option('display.max_colwidth', None)
 
 print(dframe[dframe['user'].astype('string') == 'lost_dog']['text'])
 
-func.title('find duplicated tweets')
+fun.title('find duplicated tweets')
 all_dframe_ids = dframe['id'].value_counts()
 display(all_dframe_ids)
 
-func.title('extract tweets that appear more than once')
+fun.title('extract tweets that appear more than once')
 duplicated_dframe_ids = all_dframe_ids[all_dframe_ids >= 2]
 display(duplicated_dframe_ids)
 
-func.title('find out what tweets are reapeated')
+fun.title('find out what tweets are reapeated')
 duplicated_tweet_dframe = dframe[dframe['id'].isin(duplicated_dframe_ids.index)]
 display(duplicated_tweet_dframe.sort_values(by='id').head(50))
 
-func.title('see if all repeated tweets have one 0 and one 4 as sentiment')
+fun.title('see if all repeated tweets have one 0 and one 4 as sentiment')
 aggregated_sentiments = duplicated_tweet_dframe.groupby('id').agg({'sentiment': 'sum', 'text': 'first'})
 display(aggregated_sentiments)
 
-func.title('see if the estimated number of 4s matches our guess')
+fun.title('see if the estimated number of 4s matches our guess')
 aggregated_sentiments['sentiment'].value_counts()
 
-func.title('remove duplicates')
+fun.title('remove duplicates')
 dframe_wihout_duplicates = dframe[~(dframe['id'].isin(duplicated_dframe_ids.index) & (dframe['sentiment'] == 0))]
 display(dframe_wihout_duplicates)
 
-func.title('"neutralize" the sentiments')
+fun.title('"neutralize" the sentiments')
 # change the sentiment of those rows in dframe_wihout_duplicates that are listed in duplicated_dframe_ids to 2
 neutralized_dframe = dframe_wihout_duplicates.copy()
 neutralized_dframe.loc[neutralized_dframe['id'].isin(duplicated_dframe_ids.index), 'sentiment'] = 2
 display(neutralized_dframe)
 
-func.title('check if neutralization successful')
+fun.title('check if neutralization successful')
 neutralized_dframe.apply(pd.Series.nunique)
 neutralized_dframe['sentiment'].value_counts()
 
-func.title('clean out - remove flag')
+fun.title('clean out - remove flag')
 flagless_dframe = neutralized_dframe.drop(columns=['flag'])
 flagless_dframe.head(50)
 
-func.title('drop other unnecessary columns')
+fun.title('drop other unnecessary columns')
 df = flagless_dframe.drop(columns=['id', 'date', 'user'])
 display(df)
 
-func.title('From now on we have df to use')
+fun.title('From now on we have df to use')
 
-func.title('info')
+fun.title('info')
 print(df.info())
 
-func.title('head')
+fun.title('head')
 print(df.head(10))
 
-func.title('tail')
+fun.title('tail')
 print(df.tail())
 
 # we import nltk here
@@ -146,74 +146,81 @@ nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
 
-func.title('NLTK English stopwords are')
+fun.title('NLTK English stopwords are')
 display(stop_words)
 
 ### These could be done separately
-# func.title('wordnet lemmatizer')
+# fun.title('wordnet lemmatizer')
 # nltk.download('wordnet')
 # nltk.download('omw-1.4')
 # nltk.download('averaged_perceptron_tagger')
 
 # convert stringified list to list
 def strg_list_to_list(strg_list):
-  	return strg_list.strip("[]").replace("'","").replace('"',"").replace(",","").split()
-  
+    return strg_list.strip("[]").replace("'","").replace('"',"").replace(",","").split()
+
 # we import re and contractions here to do some removal of hyperlinks, stop-words, ...
+def replace_emoticons(text):
+    words = text.split()
+    replaced_words = [const.emoticons.get(word, word) for word in words]
+    replaced_sentence = ' '.join(replaced_words)
+    return replaced_sentence
+
 def remove_retweet_label(text):
-  	return re.sub('RT @[\w_]+:','', text)
+    return re.sub('RT @[\w_]+:','', text)
 
 def remove_video_label(text):
-  	return re.sub('VIDEO:','', text)
+    return re.sub('VIDEO:','', text)
 
 def remove_hyperlink(text):
-  	return re.sub(r'http\S+','', text) # r=raw \S=string
+    return re.sub(r'http\S+','', text) # r=raw \S=string
 
 def remove_twitterhandle(text):
-  	return re.sub('@[A-Za-z0-9_]+(:)?','', text)
+    return re.sub('@[A-Za-z0-9_]+(:)?','', text)
 
 def remove_escape_sequence(text):
-  	return re.sub(r'\n','', text)
+    return re.sub(r'\n','', text)
 
 def remove_extra_spaces(text):
-  	return  re.sub(r"\s+"," ", text)  
+    return  re.sub(r"\s+"," ", text)  
 
 def remove_contraction(text):
-  	return ' '.join([contractions.fix(word) for word in text.split()])
+    return ' '.join([contractions.fix(word) for word in text.split()])
   
 def remove_stopwords(text):
-  	return " ".join([word for word in text.split() if word not in stop_words])
+    return " ".join([word for word in text.split() if word not in stop_words])
 
 def pretokenization_cleaning(text):
-	ext=remove_retweet_label(text)
-	text=remove_video_label(text)
-	text=remove_hyperlink(text)
-	text=remove_twitterhandle(text)
-	text=remove_escape_sequence(text)
-	text=remove_extra_spaces(text)  
-	text=remove_contraction(text)
-	#text=remove_stopwords(text)
-	return text
+    text = replace_emoticons(text)
+    text = remove_retweet_label(text)
+    text = remove_video_label(text)
+    text = remove_hyperlink(text)
+    text = remove_twitterhandle(text)
+    text = remove_escape_sequence(text)
+    text = remove_extra_spaces(text)  
+    text = remove_contraction(text)
+    text = remove_stopwords(text)
+    return text
 
 # we import TweetTokenizer from nltk.tokenize
 def tokenize(text):
-	tknzr = TweetTokenizer(reduce_len=True)
-	return tknzr.tokenize(text)
+    tknzr = TweetTokenizer(reduce_len=True)
+    return tknzr.tokenize(text)
 
 # normalizing task using Stemmer
 import nltk
 def stemming(unkn_input):
-	porter = nltk.PorterStemmer()
-	if (isinstance(unkn_input,list)):
-		list_input=unkn_input
-	if (isinstance(unkn_input,str)):
-		list_input=strg_list_to_list(unkn_input)
-	list_stemmed=[]
-	for word in list_input:
-		word=porter.stem(word)
-		list_stemmed.append(word)
-	#return " ".join(list_stemmed) #use this to return a string
-	return list_stemmed #use this to return a list
+    porter = nltk.PorterStemmer()
+    if (isinstance(unkn_input,list)):
+        list_input = unkn_input
+    if (isinstance(unkn_input,str)):
+        list_input = strg_list_to_list(unkn_input)
+        list_stemmed = []
+        for word in list_input:
+            word = porter.stem(word)
+            list_stemmed.append(word)
+            #return " ".join(list_stemmed) #use this to return a string
+        return list_stemmed #use this to return a list
 	
 # normalizing task using Lemmatizer
 import nltk
@@ -312,7 +319,7 @@ print_exec_time(start_time)
 # PREPROCESSING
 
 start_time = time.time()
-func.title('Preprocessing')
+fun.title('Preprocessing')
 # start the "dotter"-thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -331,7 +338,7 @@ print(df.head(10))
 # TOKENIZATION
 
 start_time = time.time()
-func.title('Tokenization')
+fun.title('Tokenization')
 # start new thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -349,7 +356,7 @@ print(df.head(10))
 # STEMMING
 
 start_time = time.time()
-func.title('Stemming')
+fun.title('Stemming')
 # start new thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -367,7 +374,7 @@ print(df.head(10))
 # LEMMATIZATION
 
 start_time = time.time()
-func.title('Lemmatization')
+fun.title('Lemmatization')
 # start new thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -385,7 +392,7 @@ print(df.head(10))
 # POST-TOKENIZATION
 
 start_time = time.time()
-func.title('Post-Tokenization')
+fun.title('Post-Tokenization')
 # start new thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -393,7 +400,7 @@ pi.start_thread()
 # (4.5) Post-Tokenization Cleaning
 # calling post-tokenization_cleaning (list comprehension style)
 df['posttoken']=[posttokenization_cleaning(list_sentence) for list_sentence in df['lemmatized']]
-func.Emsize.setES(const.EMBEDDING_SIZE)
+fun.Emsize.setES(const.EMBEDDING_SIZE)
 # stop the dotter
 pi.stop_thread()
 # calculate and print execution time
@@ -404,7 +411,7 @@ print(df.head(10))
 # POST-TOKENIZATION
 
 start_time = time.time()
-func.title('String-Cleaning')
+fun.title('String-Cleaning')
 # start new thread
 pi.dot_thread = pi.threading.Thread(target=pi.print_dots, args=(pi.stop_progress_indicator,))
 pi.start_thread()
@@ -456,8 +463,9 @@ nonletterclean_df = df.drop(['sentiment','text','pretoken','token','stemmed','le
 sentiment_df = df.drop(['text','pretoken','token','stemmed','lemmatized','posttoken','nonletterclean'], axis=1)
 # export the final dataset as 'input_csv'; the 
 # one that is meant to be fed into the ML engine
-export_csv(nonletterclean_df, nonletterclean_csv)
-export_csv(sentiment_df, sentiment_csv)
+print(nonletterclean_df)
+nonletterclean_df.to_csv(nonletterclean_csv, index=False, header=False)
+sentiment_df.to_csv(sentiment_csv, index=False, header=False)
 
 # # (2) import for testing
 # df_test = pd.read_csv(final_csv)
@@ -476,4 +484,4 @@ export_csv(sentiment_df, sentiment_csv)
 print_exec_time(start_time)
 print_exec_time(absolute_start_time)
 
-print(f'embedding size is {func.Emsize().getES()}')
+print(f'embedding size is {fun.Emsize().getES()}')
